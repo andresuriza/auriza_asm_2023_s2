@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
-from scipy.io import wavfile
+import sounddevice as sd
+import librosa
 
-frequency, signalData = wavfile.read("C:\\Users\\andres\\Music\\rideofthevalkyries.wav")
+y, sr = librosa.load('C:\\Users\\andres\\Music\\rideofthevalkyries.wav')
+            
+sd.play(y[0:600000], sr)
 
-plt.title('Espectograma')    
-plt.specgram(signalData, Fs = frequency, NFFT = 512)
-plt.xlabel('Tiempo [s]')
-plt.ylabel('Frecuencia [Hz]')
+plt.specgram(y[0:600000], NFFT = 5000, Fs = sr, noverlap = 400, cmap='jet_r')
+plt.xlabel('Tiempo (s)') 
+plt.ylabel('Frecuencia (Hz)')
+plt.colorbar()
 plt.show()
