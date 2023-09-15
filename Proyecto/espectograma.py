@@ -1,79 +1,30 @@
-import time
 import matplotlib.pyplot as plt
 import sounddevice as sd
 import librosa
-import numpy as np
 
-"""
 y, sr = librosa.load('C:\\Users\\andres\\Music\\rideofthevalkyries.wav')
-            
-sd.play(y[0:600000], sr)
+
+#sd.play(y[0:600000], sr)
+
+y_harmonic, y_percussive = librosa.effects.hpss(y)
 
 plt.specgram(y[0:600000], NFFT = 5000, Fs = sr, noverlap = 400, cmap='jet_r')
 plt.xlabel('Tiempo (s)') 
 plt.ylabel('Frecuencia (Hz)')
+plt.title("Espectograma")
 plt.colorbar()
-plt.show()
 
-"""
-dt = 0.001
-t = np.arange(0, 1, dt)
-
-wave = np.sin(2 * np.pi * 4 * t)
-
-cleanWave = wave
-
-wave = wave + 2.5 * np.random.randn(len(t)) # Ruido Gaussiano
-
-n = len(t)
-ffTransform = np.fft.fft(wave, n) # Transformada rápida de fourier
-PSD = ffTransform * np.conj(ffTransform) / n # Power spectral density
-freq = (1 / (dt * n)) * np.arange(n)
-L = np.arange(1, np.floor(n / 2), dtype = 'int')
-
-fig, axs = plt.subplots(2, 1)
-plt.subplots_adjust(None, None, None, None, None, 0.4)
-
-plt.sca(axs[0])
-plt.plot(t, wave, color = 'c', linewidth = 1.5, label = 'Ruido')
-plt.plot(t, cleanWave, color = 'k', linewidth = 2, label = 'Limpia')
-plt.xlim(t[0], t[-1])
-plt.title('Gráfica onda + ruido Gaussiano')
+plt.figure()
+plt.specgram(y_harmonic[0:600000], NFFT = 5000, Fs = sr, noverlap = 400, cmap='jet_r')
 plt.xlabel('Tiempo (s)') 
-plt.ylabel('Amplitud')
-plt.legend()
+plt.ylabel('Frecuencia (Hz)')
+plt.title("Espectograma harmónicos extraídos")
+plt.colorbar()
 
-plt.sca(axs[1])
-plt.plot(freq[L], PSD[L], color = 'c', linewidth = 2, label = 'Ruido')
-plt.xlim(freq[L[0]], freq[L[-1]])
-plt.title('Gráfica FFT')
-plt.xlabel('Frecuencia (Hz)') 
-plt.ylabel('Potencia')
-plt.legend()
-
-indices = PSD > 100  # Retorna boolean de si la potencia es muy alta
-cleanPSD = PSD * indices    # Elimina las frecuencias comunes
-ffTransform = indices * ffTransform
-inverseFft = np.fft.ifft(ffTransform) # Transformada inversa
-
-fig, axs = plt.subplots(2, 1)
-plt.subplots_adjust(None, None, None, None, None, 0.4)
-
-plt.sca(axs[0])
-plt.plot(t, inverseFft, color = 'k', linewidth = 2, label = 'Filtrada')
-plt.xlim(t[0], t[-1])
-plt.title('Onda reconstruida')
+plt.figure()
+plt.specgram(y_percussive[0:600000], NFFT = 5000, Fs = sr, noverlap = 400, cmap='jet_r')
 plt.xlabel('Tiempo (s)') 
-plt.ylabel('Amplitud')
-plt.legend()
-
-plt.sca(axs[1])
-plt.plot(freq[L], PSD[L], color = 'c', linewidth = 2, label = 'Ruido')
-plt.plot(freq[L], cleanPSD[L], color = 'k', linewidth = 1.5, label = 'Filtrada')
-plt.xlim(freq[L[0]], freq[L[-1]])
-plt.title('Gráfica FFT mostrando onda filtrada')
-plt.xlabel('Frecuencia (Hz)') 
-plt.ylabel('Potencia')
-plt.legend()
-
+plt.ylabel('Frecuencia (Hz)')
+plt.title("Espectograma percusión extraída")
+plt.colorbar()
 plt.show()
