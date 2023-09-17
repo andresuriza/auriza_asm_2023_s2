@@ -8,13 +8,13 @@ wave = np.sin(2 * np.pi * 4 * t)
 
 cleanWave = wave
 
-wave = wave + 2.5 * np.random.randn(len(t)) # Ruido Gaussiano
+wave = wave + 2 * np.random.randn(len(t)) # Ruido Gaussiano
 
 n = len(t)
 ffTransform = np.fft.fft(wave, n) # Transformada rápida de fourier
 PSD = ffTransform * np.conj(ffTransform) / n # Power spectral density
 freq = (1 / (dt * n)) * np.arange(n)
-L = np.arange(1, np.floor(n / 2), dtype = 'int')
+L = np.arange(1, np.floor(n / 2), dtype = 'int') # Dominio Fourier
 
 fig, axs = plt.subplots(2, 1)
 plt.subplots_adjust(None, None, None, None, None, 0.4)
