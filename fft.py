@@ -2,18 +2,32 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
 
-plt.rcParams['figure.dpi'] = 100
+sampleRate, audioData = wavfile.read('laser1.wav')
+def fastFourier (audioData):
+    audioFFT = np.fft.fft(audioData) # Tranformada Rápida de Fourier
+    return audioFFT
 
-sampleRate, sound = wavfile.read('laser1.wav')
+def graphFFT (audioData, sampleRate):
 
-sound = sound / 2.0**15 # Potencia de 2 para 44kHz
+    audioDataFFT = fastFourier(audioData)
 
-fft_spectrum = np.fft.rfft(sound)
-freq = np.fft.rfftfreq(sound.size, d=1./sampleRate)
+    # Calcular la frecuencia correspondiente a cada punto en la FFT
+    frequencies = np.fft.fftfreq(len(audioData), 1 / sampleRate)
 
-fft_spectrum_abs = np.abs(fft_spectrum) # Obtener amplitudes y no la parte imaginaria
+    # Tomar solo la mitad positiva de la FFT (frecuencias no negativas)
+    positiveFrequencies = frequencies[:len(frequencies) // 2]
+    audioFFTMagnitude = np.abs(audioDataFFT[:len(frequencies) // 2])
 
-plt.plot(freq, fft_spectrum_abs)
-plt.xlabel("Frecuencia (Hz)")
-plt.ylabel("Amplitud")
-plt.show()
+    # Crear la gráfica
+    plt.figure(figsize=(12, 6))
+    plt.plot(positiveFrequencies, audioFFTMagnitude)
+    plt.title('Espectro de Frecuencia')
+    plt.xlabel('Frecuencia (Hz)')
+    plt.ylabel('Amplitud')
+    plt.grid()
+    plt.show()
+
+    return 1
+
+graphFFT(sampleRate, audioData)
+
