@@ -15,7 +15,7 @@ def getFreqFFT (audioData, sampleRate):
     return freqFFT
 
 # Función que grafica el resultado de aplicar la FFT a una señal de audio
-def graphFFT (audioData, sampleRate):
+def graphFFT (audioData, sampleRate, titleGraph):
 
     audioDataFFT = getFastFourier(audioData)
 
@@ -28,7 +28,7 @@ def graphFFT (audioData, sampleRate):
     # Creación de la gráfica
     plt.figure(figsize=(12, 6))
     plt.plot(positiveFrequencies, audioFFTMagnitude)
-    plt.title('Espectro de Frecuencia')
+    plt.title(titleGraph)
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Amplitud')
     plt.grid()
@@ -39,5 +39,5 @@ def graphFFT (audioData, sampleRate):
 
 # Ejemplo con un archivo de audio
 sampleRate, audioData = wavfile.read('laser1.wav') # Lectura del archivo de audio
-graphFFT(audioData, sampleRate)
+#graphFFT(audioData, sampleRate, "Espectro de Frecuencia")
 
