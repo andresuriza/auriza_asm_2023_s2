@@ -38,7 +38,7 @@ modulatedSignal = modulationAM(audioSignal, carrierFrequency, sampleRate) # Modu
 demodulatedSignal = am_demodulation(modulatedSignal, carrierFrequency, sampleRate) # Demodular la señal modulada
 
 # Crear un archivo .wav con el resultado
-outputPath = "demodulated_audio.wav"
+outputPath = "demodulatedLaser1.wav"
 saveWavFile(outputPath, sampleRate, demodulatedSignal)
 
 # Graficar la señal demodulada en función de la frecuencia con fft

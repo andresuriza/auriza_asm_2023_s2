@@ -23,7 +23,7 @@ def graphFFT (audioData, sampleRate, titleGraph):
     
     positiveFrequencies = freqFFT[:len(freqFFT) // 2] # Tomar solo la mitad positiva de la FFT (frecuencias no negativas)
 
-    audioFFTMagnitude = np.abs(audioDataFFT[:len(freqFFT) // 2])
+    audioFFTMagnitude = np.abs(audioDataFFT[:len(freqFFT) // 2]) # Obtener magnitud de las frecuencias positivas
 
     # Creación de la gráfica
     plt.figure(figsize=(12, 6))
