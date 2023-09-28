@@ -2,23 +2,30 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
 
-sampleRate, audioData = wavfile.read('laser1.wav')
-def fastFourier (audioData):
+# ------------------------------ Inicio Funcionalidad ----------------------------
+
+# Función que le aplica la transformada rápida de Fourier a un archivo de sonido
+def getFastFourier (audioData):
     audioFFT = np.fft.fft(audioData) # Tranformada Rápida de Fourier
     return audioFFT
 
+# Función que obtiene las frecuencias de los armónicos del archivo de audio
+def getFreqFFT (audioData, sampleRate):
+    freqFFT = np.fft.fftfreq(len(audioData), 1 / sampleRate)
+    return freqFFT
+
+# Función que grafica el resultado de aplicar la FFT a una señal de audio
 def graphFFT (audioData, sampleRate):
 
-    audioDataFFT = fastFourier(audioData)
+    audioDataFFT = getFastFourier(audioData)
 
-    # Calcular la frecuencia correspondiente a cada punto en la FFT
-    frequencies = np.fft.fftfreq(len(audioData), 1 / sampleRate)
+    freqFFT = getFreqFFT(audioData, sampleRate) # Calcular la frecuencia correspondiente a cada punto en la FFT
+    
+    positiveFrequencies = freqFFT[:len(freqFFT) // 2] # Tomar solo la mitad positiva de la FFT (frecuencias no negativas)
 
-    # Tomar solo la mitad positiva de la FFT (frecuencias no negativas)
-    positiveFrequencies = frequencies[:len(frequencies) // 2]
-    audioFFTMagnitude = np.abs(audioDataFFT[:len(frequencies) // 2])
+    audioFFTMagnitude = np.abs(audioDataFFT[:len(freqFFT) // 2])
 
-    # Crear la gráfica
+    # Creación de la gráfica
     plt.figure(figsize=(12, 6))
     plt.plot(positiveFrequencies, audioFFTMagnitude)
     plt.title('Espectro de Frecuencia')
@@ -26,8 +33,11 @@ def graphFFT (audioData, sampleRate):
     plt.ylabel('Amplitud')
     plt.grid()
     plt.show()
+    return 1 
 
-    return 1
+#------------------------------ Fin Funcionalidad ---------------------------
 
-graphFFT(sampleRate, audioData)
+# Ejemplo con un archivo de audio
+sampleRate, audioData = wavfile.read('laser1.wav') # Lectura del archivo de audio
+graphFFT(audioData, sampleRate)
 
