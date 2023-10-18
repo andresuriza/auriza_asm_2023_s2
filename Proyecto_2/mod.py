@@ -1,6 +1,6 @@
-from fft import graphFFT
 import numpy as np
 import scipy.io.wavfile as wavfile
+import matplotlib.pyplot as plt
 
 # ------------------------------ Inicio Funcionalidad ----------------------------
 
@@ -18,32 +18,46 @@ def am_demodulation(modulatedSignal, carrierFrequency, sampleRate):
     demodulatedSignal = modulatedSignal * carrier
     return demodulatedSignal
 
-# Función para guardar una señal en un archivo WAV
-def saveWavFile (outputPath, sampleRate, signal):
-    wavfile.write(outputPath, sampleRate, signal.astype(np.int16))
-    return 1
-
 #------------------------------ Fin Funcionalidad ---------------------------
 
-# Ejemplo con un archivo de audio real 
-filePath = "laser1.wav"
-sampleRate, audioSignal = wavfile.read(filePath) # Cargar el archivo WAV
+# Ejemplo con una señal senoidal
+signalFrequency = 100  # Frecuencia de la portadora (Hz)
+signalAmplitude = 1.0 # Amplitud de la portadora
 
-graphFFT(audioSignal, sampleRate, "Señal Original") # Graficar el sonido original con fft
+# Tiempo de muestreo
+tiempoMuestreo = 0.001  # Intervalo de tiempo entre muestras
+tiempoTotal = 0.2  # Duración total de la señal
+sampleRate = 400
 
-# Parámetros para la modulación AM
+# Generar la señal de mensaje (una onda senoidal)
+t = np.arange(0, tiempoTotal, 1 / sampleRate)
+
+audioSignal = signalAmplitude * np.sin(2 * np.pi * signalFrequency * t)
+
+# Parámetros de la señal portadora
 carrierFrequency = 1000  # Frecuencia de la portadora en Hz
 
+# Parámetros para la modulación AM
 modulatedSignal = modulationAM(audioSignal, carrierFrequency, sampleRate) # Modular la señal de audio
 demodulatedSignal = am_demodulation(modulatedSignal, carrierFrequency, sampleRate) # Demodular la señal modulada
 
-# Crear un archivo .wav con el resultado
-outputPath = "demodulatedLaser1.wav"
-saveWavFile(outputPath, sampleRate, demodulatedSignal)
+# Graficar las señales
+plt.figure(figsize=(12, 6))
 
-# Graficar la señal demodulada en función de la frecuencia con fft
-graphFFT(demodulatedSignal, sampleRate, "Señal Demodulada")
+plt.subplot(3, 1, 1)
+plt.plot(t, audioSignal)
+plt.title('Señal de Mensaje')
 
-print("Modulación y demodulación AM completadas. Se ha guardado la señal demodulada en", outputPath)
+plt.subplot(3, 1, 2)
+plt.plot(t, modulatedSignal)
+plt.title('Señal Modulada (AM)')
+
+plt.subplot(3, 1, 3)
+plt.plot(t, demodulatedSignal)
+plt.title('Señal Demodulada')
+
+plt.tight_layout()
+plt.show()
+
 
 
