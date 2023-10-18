@@ -1,43 +1,38 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.io import wavfile
+from scipy.fftpack import fft, fftshift
 
 # ------------------------------ Inicio Funcionalidad ----------------------------
+# Función que genera una onda seno
+def sine_wave(f,overSampRate,phase,nCyl):
+	fs = overSampRate*f # sampling frequency
+	t = np.arange(0,nCyl*1/f-1/fs,1/fs) # time base
+	g = np.sin(2*np.pi*f*t+phase) # replace with cos if a cosine wave is desired
+	return (t,g) # return time base and signal g(t) as tuple
 
-# Función que le aplica la transformada rápida de Fourier a un archivo de sonido
-def getFastFourier (audioData):
-    audioFFT = np.fft.fft(audioData) # Tranformada Rápida de Fourier
-    return audioFFT
+# Función que grafica el resultado de aplicar la FFT a una señal seno
+def graphFFT(f, overSampRate, fs, phase, nCycl):
+    (t,x) = sine_wave(f,overSampRate,phase,nCyl) #function call
 
-# Función que obtiene las frecuencias de los armónicos del archivo de audio
-def getFreqFFT (audioData, sampleRate):
-    freqFFT = np.fft.fftfreq(len(audioData), 1 / sampleRate)
-    return freqFFT
-
-# Función que grafica el resultado de aplicar la FFT a una señal de audio
-def graphFFT (audioData, sampleRate, titleGraph):
-
-    audioDataFFT = getFastFourier(audioData)
-
-    freqFFT = getFreqFFT(audioData, sampleRate) # Calcular la frecuencia correspondiente a cada punto en la FFT
-    
-    positiveFrequencies = freqFFT[:len(freqFFT) // 2] # Tomar solo la mitad positiva de la FFT (frecuencias no negativas)
-
-    audioFFTMagnitude = np.abs(audioDataFFT[:len(freqFFT) // 2]) # Obtener magnitud de las frecuencias positivas
+    NFFT = 256  
+    X = fftshift(fft(x, NFFT))
 
     # Creación de la gráfica
-    plt.figure(figsize=(12, 6))
-    plt.plot(positiveFrequencies, audioFFTMagnitude)
-    plt.title(titleGraph)
-    plt.xlabel('Frecuencia (Hz)')
-    plt.ylabel('Amplitud')
-    plt.grid()
+    fig4, ax = plt.subplots(nrows=1, ncols=1) #create figure handle
+    fVals=np.arange(start = -NFFT/2,stop = NFFT/2)*fs/NFFT
+    ax.plot(fVals,np.abs(X),'b')
+    ax.set_title('Transformada rápida de Fourier')
+    ax.set_xlabel('Frecuencia (Hz)')         
+    ax.set_ylabel('Amplitud')
+    ax.set_xlim(-50, 50)
+    ax.set_xticks(np.arange(-50, 50+10, 10))
     plt.show()
-    return 1 
-
 #------------------------------ Fin Funcionalidad ---------------------------
 
-# Ejemplo con un archivo de audio
-sampleRate, audioData = wavfile.read('laser1.wav') # Lectura del archivo de audio
-#graphFFT(audioData, sampleRate, "Espectro de Frecuencia")
+f = 100 
+overSampRate = 30 
+fs = 400
+phase = 0
+nCyl = 5
 
+graphFFT(f, overSampRate, fs, phase, nCyl)
