@@ -2,7 +2,7 @@ import numpy as np
 import scipy.io.wavfile as wavfile
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft, fftshift
-
+    
 # ------------------------------ Inicio Funcionalidad ----------------------------
 
 # Función para la creación de la gráfica FFT
