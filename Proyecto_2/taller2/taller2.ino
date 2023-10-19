@@ -1,7 +1,7 @@
 #include <arduinoFFT.h>
 
 const int OUTPUT_FREQUENCY =  50;// Frecuencia de la señal senoidal en Hz
-const uint16_t SAMPLES = 1024; //This value MUST ALWAYS be a power of 2
+const uint16_t SAMPLES = 512; //This value MUST ALWAYS be a power of 2
 const double SAMPLING_FREQUENCY = 1500; //Hz, must be less than 10000 due to ADC ///126
 const double CARRIER_FREQUENCY = 300;
 double signall[SAMPLES];
