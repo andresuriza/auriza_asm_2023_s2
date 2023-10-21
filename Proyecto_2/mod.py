@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 # Función para realizar la modulación AM
 def modulationAM(signal, carrierFrequency, sampleRate):
     timeVector = np.arange(len(signal)) / sampleRate
-    carrier = np.cos(2 * np.pi * carrierFrequency * timeVector)
+    carrier = np.sin(2 * np.pi * carrierFrequency * timeVector)
     modulatedSignal = signal * carrier
     return modulatedSignal
 
 # Función para realizar la demodulación AM
 def am_demodulation(modulatedSignal, carrierFrequency, sampleRate):
     timeVector = np.arange(len(modulatedSignal)) / sampleRate
-    carrier = np.cos(2 * np.pi * carrierFrequency * timeVector)
+    carrier = np.sin(2 * np.pi * carrierFrequency * timeVector)
     demodulatedSignal = modulatedSignal * carrier
     return demodulatedSignal
 
@@ -27,7 +27,7 @@ signalAmplitude = 1.0 # Amplitud de la portadora
 # Tiempo de muestreo
 tiempoMuestreo = 0.001  # Intervalo de tiempo entre muestras
 tiempoTotal = 0.2  # Duración total de la señal
-sampleRate = 400
+sampleRate = 4000
 
 # Generar la señal de mensaje (una onda senoidal)
 t = np.arange(0, tiempoTotal, 1 / sampleRate)
