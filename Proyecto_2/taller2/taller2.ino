@@ -1,5 +1,6 @@
 #include <arduinoFFT.h>
 
+
 const int OUTPUT_FREQUENCY =  50;// Frecuencia de la señal senoidal en Hz
 const uint16_t SAMPLES = 512; //This value MUST ALWAYS be a power of 2
 const double SAMPLING_FREQUENCY = 1500; //Hz, must be less than 10000 due to ADC ///126
@@ -8,6 +9,7 @@ double signall[SAMPLES];
 double carrier[SAMPLES];
 double modulatedSignal[SAMPLES];
 double demodulatedSignal[SAMPLES];
+double filteredSignal[SAMPLES];
 double vReal[SAMPLES];
 double vImag[SAMPLES];
 
@@ -56,6 +58,19 @@ void amplitude_demodulate_signal(){
   }
 }
 
+void lowPassFilter50(){
+  //coeficients for x
+  double b[] = {0.065,0.130,0.065};
+  //coeficients for y
+  double a[] = {1.159,-0.420};
+  filteredSignal[0] = 0;
+  filteredSignal[1] = 0;
+  for (int i =2;i<SAMPLES;i++){
+    filteredSignal[i] = demodulatedSignal[i]*b[0] + demodulatedSignal[i-1]*b[1]
+    + demodulatedSignal[i-2]*b[2] + filteredSignal[i-1]*a[0] 
+    + filteredSignal[i-2]*a[1];
+  }
+}
 void setup() {
   Serial.begin(9600);
   samplingPeriod = round((1.0/SAMPLING_FREQUENCY)*1000000);
@@ -69,6 +84,7 @@ void loop() {
     generateCarrierCos(CARRIER_FREQUENCY);
     amplitude_modulate_signal();
     amplitude_demodulate_signal();
+    lowPassFilter50();
     
     for (int i = 0;i<SAMPLES;i++){
       Serial.print("Senal_senoidal:");
@@ -85,6 +101,10 @@ void loop() {
 
       Serial.print("Senal_demodulada:");
       Serial.println(demodulatedSignal[i]);
+      Serial.print(",");
+      Serial.print("Senal_filtrada:");
+      Serial.println(filteredSignal[i]);
+      delay(200);
     }
     signallGenerated = true;
   }

@@ -1,5 +1,6 @@
 #include <arduinoFFT.h>
-
+#include <SPI.h>
+#define SS_PIN 10
 #define PIN_SENSOR A0
 
 const int OUTPUT_FREQUENCY =  100; // Frecuencia del tono senoidal enviado
@@ -15,9 +16,14 @@ unsigned int samplingPeriod;
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(250000);
+  pinMode(SS_PIN, OUTPUT);
+  SPI.begin();
+  SPI.setClockDivider(SPI_CLOCK_DIV4);
   pinMode(PIN_SENSOR, INPUT);
   samplingPeriod = round((1.0/SAMPLING_FREQUENCY)*1000000);
+  
+  
 }
 
 void loop() {
@@ -35,23 +41,14 @@ void loop() {
 
       int mensajeCombinado = primerSenalModulada + segundaSenalModulada; 
 
-      /*
-      Serial.print(primerMensaje);
-      Serial.print(",");
-      Serial.print(primerPortadora);
-      Serial.print(",");
-      Serial.println(primerSenalModulada);*/
+      Serial.println( (int)primerMensaje);
       
-      /*
-      Serial.print(segundoMensaje);
-      Serial.print(",");
-      Serial.print(segundaPortadora);
-      Serial.print(",");
-      Serial.println(segundaSenalModulada);*/
-
-      //Serial.println(mensajeCombinado);
-
+      digitalWrite(SS_PIN, LOW);
+      SPI.transfer(primerMensaje);
+      digitalWrite(SS_PIN, HIGH);
+      Serial.println(primerMensaje);
       Serial.println(mensajeCombinado);
+      
       break;
     }
   }
