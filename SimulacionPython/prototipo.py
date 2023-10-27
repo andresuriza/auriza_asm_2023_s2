@@ -41,11 +41,8 @@ signalAmplitude = 1.0 # Amplitud de la señal
 sampleRate = 8000 # Total de Muestras por segundo
 tiempoMuestreo = 1 / sampleRate  # Intervalo de tiempo entre muestras
 tiempoTotal = 0.2  # Duración total de la señal
-<<<<<<<< HEAD:SimulacionPython/prototipo.py
 NFFT = 256  
-========
-NFFT = 256
->>>>>>>> allToPico:SimulaciónPython/prototipo.py
+
 
 # Generar la señal de mensaje (una onda senoidal)
 t = np.arange(0, tiempoTotal, tiempoMuestreo)
