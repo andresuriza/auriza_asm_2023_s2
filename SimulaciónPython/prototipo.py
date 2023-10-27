@@ -34,14 +34,14 @@ def am_demodulation(modulatedSignal, carrierFrequency, sampleRate):
 #------------------------------ Fin Funcionalidad ---------------------------
 
 # Ejemplo con una señal senoidal
-signalFrequency = 100  # Frecuencia de la portadora (Hz)
-signalAmplitude = 1.0 # Amplitud de la portadora
+signalFrequency = 100  # Frecuencia de la señal (Hz)
+signalAmplitude = 1.0 # Amplitud de la señal
 
 # Tiempo de muestreo
-tiempoMuestreo = 0.001  # Intervalo de tiempo entre muestras
+sampleRate = 8000 # Total de Muestras por segundo
+tiempoMuestreo = 1 / sampleRate  # Intervalo de tiempo entre muestras
 tiempoTotal = 0.2  # Duración total de la señal
-sampleRate = 4000
-NFFT = 256  
+NFFT = 256
 
 # Generar la señal de mensaje (una onda senoidal)
 t = np.arange(0, tiempoTotal, 1 / sampleRate)
@@ -49,7 +49,7 @@ t = np.arange(0, tiempoTotal, 1 / sampleRate)
 audioSignal = signalAmplitude * np.sin(2 * np.pi * signalFrequency * t)
 
 # Parámetros de la señal portadora
-carrierFrequency = 1000  # Frecuencia de la portadora en Hz
+carrierFrequency = 500  # Frecuencia de la portadora en Hz
 
 # Parámetros para la modulación AM
 modulatedSignal = modulationAM(audioSignal, carrierFrequency, sampleRate) # Modular la señal de audio
