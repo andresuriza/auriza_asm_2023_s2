@@ -38,13 +38,13 @@ signalFrequency = 100  # Frecuencia de la portadora (Hz)
 signalAmplitude = 1.0 # Amplitud de la portadora
 
 # Tiempo de muestreo
-tiempoMuestreo = 0.001  # Intervalo de tiempo entre muestras
+sampleRate = 8000 # Total de Muestras por segundo
+tiempoMuestreo = 1 / sampleRate  # Intervalo de tiempo entre muestras
 tiempoTotal = 0.2  # Duración total de la señal
-sampleRate = 4000
 NFFT = 256  
 
 # Generar la señal de mensaje (una onda senoidal)
-t = np.arange(0, tiempoTotal, 1 / sampleRate)
+t = np.arange(0, tiempoTotal, tiempoMuestreo)
 
 audioSignal = signalAmplitude * np.sin(2 * np.pi * signalFrequency * t)
 
