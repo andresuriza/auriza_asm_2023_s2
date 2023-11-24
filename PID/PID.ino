@@ -1,5 +1,6 @@
-int potPin = A3;
-int refPin = A2;
+int potPin = A0;
+int refPin = A1
+;
 
 int potVal = 0;
 int encoder_val = 0;
@@ -20,8 +21,8 @@ float vMax = 12; // 12V motor
 float vMin = -12; // 12V motor
 float volt = 0.1;
 const byte PWMPin = 6;
-const byte DirPin1 = 7;
-const byte DirPin2 = 8;
+const byte DirPin1 = 9; //9 is CW
+const byte DirPin2 = 10; //0 is CCW
 
 void ControlPosicion(float volt, float vMax) {
   int PWMval = int(255 * abs(volt) / vMax);
@@ -61,7 +62,7 @@ void loop() {
   t = millis();
   dt = (t - t_prev);
   angulo = potVal;
-  angulo_d = encoder_val;
+  angulo_d = encoder_val*1.96; //mapping max value is 522
 
   err = angulo_d - angulo;
   integralError = inte_prev + (dt * (err + e_prev) / 2); // Diferencia regresiva
